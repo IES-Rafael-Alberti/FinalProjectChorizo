@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2836908268812499615
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2836908268812499681}
+  - component: {fileID: 2836908268812499614}
+  m_Layer: 0
+  m_Name: spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2836908268812499681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836908268812499615}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2836908268812499614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2836908268812499615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec5cdb86e5edf84d9976a54c0541c5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entrance: {fileID: 5140704399514756830, guid: 8411161436446934b9a0c9b393481d02,
+    type: 3}
+  rooms:
+  - {fileID: 7132893372062953887, guid: 86609a5f3c321c44fa57ed2dea09fdaa, type: 3}
+  - {fileID: 4119629085812976022, guid: 7266d34be77414a458b1d373e1e02b8d, type: 3}
+  - {fileID: 8230928019775089782, guid: 8555b56886f3ab340959dd4b9f1d4c3e, type: 3}
+  - {fileID: 144405818519964124, guid: 49fe871f057241346ae35bfad7307c04, type: 3}
+  - {fileID: 1128642824175813425, guid: 111d3026283c0454a84b813645f1c528, type: 3}
+  specailroom:
+  - {fileID: 1128642824175813425, guid: 111d3026283c0454a84b813645f1c528, type: 3}
+  alternateEntrance: []
+  hallways:
+  - {fileID: 3100429997608422619, guid: 7e644fdd6a1d7e84e8e24066e73cb039, type: 3}
+  - {fileID: 4605498245162691295, guid: e6d402b6bd64f5c48bcbc69b939d89f6, type: 3}
+  door: {fileID: 920285818038205555, guid: cf13db52f8fe2c04c9c892142f471255, type: 3}
+  numberofrooms: 40
+  roomLayer:
+    serializedVersion: 2
+    m_Bits: 2048

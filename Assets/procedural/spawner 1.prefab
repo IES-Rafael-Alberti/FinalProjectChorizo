@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5385788765165555895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5385788765165555913}
+  - component: {fileID: 5385788765165555894}
+  m_Layer: 0
+  m_Name: spawner 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5385788765165555913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5385788765165555895}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5385788765165555894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5385788765165555895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec5cdb86e5edf84d9976a54c0541c5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entrance: {fileID: 3946815779557254116, guid: 1969240c4670cf04baae819731a4d69c,
+    type: 3}
+  rooms:
+  - {fileID: 1261157710558022140, guid: 98b30f6b9c7051346b67435b928461f2, type: 3}
+  - {fileID: 6394011693623653937, guid: 44aefe125dff8944d822d6788815aafe, type: 3}
+  - {fileID: 2974403324205531606, guid: 4d47bb09bcea64941844a2b9d7b684cb, type: 3}
+  - {fileID: 5101223235406071262, guid: 3f7cb8a33dbb9234da8beeaa0f60e7a0, type: 3}
+  - {fileID: 2019305560928292095, guid: 723fb71086893454ead056e4f1429ece, type: 3}
+  specailroom:
+  - {fileID: 2743180504405550861, guid: b2d6d0efa8e63bf4584d4904b0ad2a9e, type: 3}
+  alternateEntrance: []
+  hallways:
+  - {fileID: 2617027820246940919, guid: e251ce6787c415b44a843718aca71655, type: 3}
+  - {fileID: 3794925271435473698, guid: c67d31b2af4743042bf432c48ae65980, type: 3}
+  - {fileID: 2259521773861600226, guid: a57e9c0156d783144bdf3ba23c5bafbe, type: 3}
+  - {fileID: 5016142027339459979, guid: 035967b302eced143b5017caba2ef0f9, type: 3}
+  door: {fileID: 0}
+  numberofrooms: 50
+  minRoomsBeforeSpecial: 10
+  useCustomSeed: 1
+  seed: 2147483647
+  roomLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  navMeshSurface: {fileID: 0}
