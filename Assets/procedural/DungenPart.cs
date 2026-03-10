@@ -29,7 +29,7 @@ public class DungenPart : MonoBehaviour
         int totalReties = 100;
         int retryIndex = 0;
 
-        //Debug.Log("Checking entry points for: " + gameObject.name);
+        Debug.Log("Checking entry points for: " + gameObject.name);
 
         if (entrypointsSL.Count == 1)
         {

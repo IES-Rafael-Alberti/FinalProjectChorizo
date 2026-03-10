@@ -18,6 +18,7 @@ public class DungenGenrator : MonoBehaviour
     [SerializeField] int numberofrooms;
     [Tooltip("Minimum number of rooms before special can appear (after entrance)")]
     [SerializeField] int minRoomsBeforeSpecial = 3;
+
     [Header("Seed Settings (this script only)")]
     [SerializeField] bool useCustomSeed = false;
     [SerializeField] int seed = 0;
@@ -25,13 +26,24 @@ public class DungenGenrator : MonoBehaviour
     [SerializeField] LayerMask roomLayer;
     [SerializeField] NavMeshSurface navMeshSurface;
 
-    private List<DungenPart> genratedRoomSL;
+    private List<DungenPart> genratedRoomSL = new List<DungenPart>();
     private bool specialPlaced = false;
 
     private void Awake()
     {
         Instance = this;
-        genratedRoomSL = new List<DungenPart>();
+
+        // CORRECCIÓN: Aseguramos que navMeshSurface sea un objeto de la ESCENA, no un asset
+        if (navMeshSurface == null || !navMeshSurface.gameObject.scene.IsValid())
+        {
+            navMeshSurface = FindFirstObjectByType<NavMeshSurface>();
+
+            if (navMeshSurface == null)
+            {
+                Debug.LogError("No se encontró un NavMeshSurface en la escena. El generador fallará.");
+            }
+        }
+
         if (useCustomSeed)
             UnityEngine.Random.InitState(seed);
     }
@@ -40,12 +52,16 @@ public class DungenGenrator : MonoBehaviour
 
     public void StartGenration()
     {
+        if (navMeshSurface == null) return;
+
         genratedRoomSL.Clear();
         specialPlaced = false;
 
         Genrate();
         AlternateEgenrate();
         FillEmptyEntrance();
+
+        // Construye el NavMesh después de generar todo
         navMeshSurface.BuildNavMesh();
     }
 
@@ -53,20 +69,22 @@ public class DungenGenrator : MonoBehaviour
     {
         int targetRooms = numberofrooms - alternateEntrance.Count;
         int attempts = 0;
-        int maxAttempts = targetRooms * 200; // arbitrary cap: 200 tries per room wanted
+        int maxAttempts = targetRooms * 200;
 
         while (genratedRoomSL.Count < targetRooms)
         {
             attempts++;
             if (attempts > maxAttempts)
             {
-                Debug.LogWarning($"Dungeon generation aborted: exceeded {maxAttempts} placement attempts. Generated {genratedRoomSL.Count}/{targetRooms} rooms.");
+                Debug.LogWarning($"Dungeon generation aborted: exceeded {maxAttempts} attempts.");
                 break;
             }
 
             // Place entrance first
             if (genratedRoomSL.Count == 0)
             {
+                if (entrance == null) { Debug.LogError("Prefab de Entrance no asignado"); break; }
+
                 var entryObj = Instantiate(entrance, transform.position, transform.rotation, navMeshSurface.transform);
                 if (entryObj.TryGetComponent(out DungenPart entryPart))
                     genratedRoomSL.Add(entryPart);
@@ -75,9 +93,9 @@ public class DungenGenrator : MonoBehaviour
 
             bool lastSlot = genratedRoomSL.Count == targetRooms - 1;
 
-            // Select a base room and free entry point
             DungenPart baseRoom = null;
             Transform entry1 = null;
+
             for (int i = 0; i < 800; i++)
             {
                 int idx = UnityEngine.Random.Range(0, genratedRoomSL.Count);
@@ -87,19 +105,17 @@ public class DungenGenrator : MonoBehaviour
                     break;
                 }
             }
-            if (baseRoom == null)
-                continue;
+
+            if (baseRoom == null) continue;
 
             var doorObj = Instantiate(door, entry1.position, entry1.rotation, navMeshSurface.transform);
 
-            // 50% chance to spawn a hallway
-            if (UnityEngine.Random.value > 0.5f)
+            if (UnityEngine.Random.value > 0.5f && hallways.Count > 0)
             {
                 TrySpawnHallway(baseRoom, entry1, doorObj);
                 continue;
             }
 
-            // Otherwise, spawn a room
             TrySpawnRoom(baseRoom, entry1, doorObj, lastSlot);
         }
     }
@@ -108,6 +124,7 @@ public class DungenGenrator : MonoBehaviour
     {
         var hallwayPrefab = hallways[UnityEngine.Random.Range(0, hallways.Count)];
         var hallwayObj = Instantiate(hallwayPrefab, navMeshSurface.transform);
+
         if (!hallwayObj.TryGetComponent(out DungenPart hallPart)
             || !hallPart.HasAvialableEntryPoint(out Transform entry2))
         {
@@ -115,6 +132,7 @@ public class DungenGenrator : MonoBehaviour
         }
 
         AlignRoom(baseRoom.transform, hallwayObj.transform, entry1, entry2);
+
         if (HandelInterscetion(hallPart))
         {
             hallPart.UnuseEntryPoint(entry2);
@@ -135,8 +153,10 @@ public class DungenGenrator : MonoBehaviour
         else if (!specialPlaced && genratedRoomSL.Count >= minRoomsBeforeSpecial
                  && specailroom.Count > 0 && UnityEngine.Random.value > 0.9f)
             prefab = specailroom[UnityEngine.Random.Range(0, specailroom.Count)];
-        else
+        else if (rooms.Count > 0)
             prefab = rooms[UnityEngine.Random.Range(0, rooms.Count)];
+        else
+            return;
 
         var roomObj = Instantiate(prefab, navMeshSurface.transform);
         if (!roomObj.TryGetComponent(out DungenPart newPart)
@@ -146,6 +166,7 @@ public class DungenGenrator : MonoBehaviour
         }
 
         AlignRoom(baseRoom.transform, roomObj.transform, entry1, entry2);
+
         if (HandelInterscetion(newPart))
         {
             newPart.UnuseEntryPoint(entry2);
@@ -163,10 +184,19 @@ public class DungenGenrator : MonoBehaviour
 
     bool HandelInterscetion(DungenPart part)
     {
-        var halfSize = part.collider.bounds.size / 2;
-        var hits = Physics.OverlapBox(part.collider.bounds.center, halfSize, Quaternion.identity, roomLayer);
+        // CORRECCIÓN: Verificamos si el collider existe para evitar NullReferenceException
+        Collider col = part.GetComponent<Collider>();
+        if (col == null)
+        {
+            Debug.LogWarning($"El prefab {part.name} no tiene Collider. No se puede detectar colisión.");
+            return false;
+        }
+
+        var halfSize = col.bounds.size / 2;
+        var hits = Physics.OverlapBox(col.bounds.center, halfSize, Quaternion.identity, roomLayer);
+
         foreach (var hit in hits)
-            if (hit != part.collider)
+            if (hit != col)
                 return true;
         return false;
     }

@@ -24,12 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2836908268812499615}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2836908268812499614
 MonoBehaviour:
@@ -43,8 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bec5cdb86e5edf84d9976a54c0541c5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entrance: {fileID: 5140704399514756830, guid: 8411161436446934b9a0c9b393481d02,
-    type: 3}
+  entrance: {fileID: 5140704399514756830, guid: 8411161436446934b9a0c9b393481d02, type: 3}
   rooms:
   - {fileID: 7132893372062953887, guid: 86609a5f3c321c44fa57ed2dea09fdaa, type: 3}
   - {fileID: 4119629085812976022, guid: 7266d34be77414a458b1d373e1e02b8d, type: 3}
@@ -59,6 +59,10 @@ MonoBehaviour:
   - {fileID: 4605498245162691295, guid: e6d402b6bd64f5c48bcbc69b939d89f6, type: 3}
   door: {fileID: 920285818038205555, guid: cf13db52f8fe2c04c9c892142f471255, type: 3}
   numberofrooms: 40
+  minRoomsBeforeSpecial: 3
+  useCustomSeed: 0
+  seed: 0
   roomLayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 0
+  navMeshSurface: {fileID: 0}
